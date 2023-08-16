@@ -2,8 +2,8 @@
 __pycache__
 
 config.json
-*.json
 build
 .vscode
 **.log
 venv
+selenium_scraper/proxy/extensions

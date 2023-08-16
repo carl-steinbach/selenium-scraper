@@ -4,11 +4,15 @@ import zipfile
 from selenium_scraper.config import config
 
 
-proxy_dir = os.path.dirname(os.path.abspath(__file__))
+proxy_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "extensions")
 zip_mode = zipfile.ZIP_DEFLATED
 
 
 def get(country: str) -> str:
+    # create proxy dir if not exists
+    if not os.path.isdir(proxy_dir):
+        os.mkdir(proxy_dir)
+
     # check if proxy is available
     if country not in config.proxy.countries:
         raise ValueError(
@@ -18,8 +22,9 @@ def get(country: str) -> str:
 
 
 def _create_zip(country: str):
+    # create the chrome extension zip
     proxy_zip_path = os.path.join(proxy_dir, country, "proxy.zip")
-    country_pass = config.proxy.password + f"-{country}"
+    country_pass = config.proxy.password + "_country-" + country
 
     manifest_name = "manifest.json"
     manifest_path = os.path.join(proxy_dir, country, manifest_name)
