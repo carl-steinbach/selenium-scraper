@@ -1,5 +1,6 @@
 import pycountry
 import selenium.webdriver
+import time
 from selenium_scraper.driver.user_agent import UserAgent
 from selenium_scraper.proxy import manager
 from selenium_scraper.config import config
@@ -26,6 +27,7 @@ def get_chome_driver(user_agent: UserAgent, proxy_name: str=None, headless=True,
     options.add_argument("--disable-plugins-discovery");
     options.add_argument("--start-maximized")
     options.add_argument("--enable-logging --v=1");
+    options.set_capability("goog:loggingPrefs", { 'performance':'ALL' });
     #options.add_argument("--incognito")
 
     if proxy_name:
@@ -50,8 +52,8 @@ def get_chome_driver(user_agent: UserAgent, proxy_name: str=None, headless=True,
         case UserAgent.DESKTOP:
             options.add_argument("--window-size=1920,1080")
 
-
-    driver = selenium.webdriver.Chrome(options=options, desired_capabilities=capabilities)
+    
+    driver = selenium.webdriver.Chrome(options=options) #desired_capabilities=capabilities)
 
     if user_agent != UserAgent.DESKTOP:
         set_platform(driver=driver, user_agent=user_agent)
@@ -115,3 +117,10 @@ def set_user_agent_data(driver, user_agent):
     """ % (mobile, platform)
 
     driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {"source": source})
+
+
+if __name__ == "__main__":
+    driver = get_chome_driver(user_agent=UserAgent.DESKTOP, headless=False)
+    driver.get(url="https://www.google.com")
+    time.sleep(600)
+    driver.quit()
