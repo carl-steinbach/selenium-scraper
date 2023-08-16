@@ -1,0 +1,1 @@
+from selenium_scraper.config import config

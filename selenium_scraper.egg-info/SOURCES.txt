@@ -1,0 +1,13 @@
+README.md
+setup.py
+selenium_scraper/__init__.py
+selenium_scraper/config.py
+selenium_scraper.egg-info/PKG-INFO
+selenium_scraper.egg-info/SOURCES.txt
+selenium_scraper.egg-info/dependency_links.txt
+selenium_scraper.egg-info/top_level.txt
+selenium_scraper/driver/__init__.py
+selenium_scraper/driver/chrome.py
+selenium_scraper/driver/user_agent.py
+selenium_scraper/proxy/__init__.py
+selenium_scraper/proxy/manager.py
