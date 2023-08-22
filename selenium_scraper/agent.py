@@ -1,11 +1,10 @@
 """A wrapper class for the selenium webdriver, allows creating and managing a driver with the desired parameters"""
-from user_agent import UserAgent
-from driver import chrome
+from selenium_scraper.user_agent import UserAgent
+from selenium_scraper.driver import chrome
 from selenium.webdriver import Chrome
 from selenium_scraper.driver_utils import wait, find, check, parse, scroll, utils
 from selenium.webdriver.remote.webelement import WebElement
 from selenium_scraper.proxy.config import ProxyConfig
-
 
 class Agent():  
     def __init__(
