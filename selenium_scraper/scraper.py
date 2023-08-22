@@ -2,19 +2,35 @@ from selenium_scraper.user_agent import UserAgent
 from selenium_scraper.credentials import Credentials
 from selenium_scraper.driver import chrome
 from selenium_scraper.agent import Agent
+from selenium_scraper.proxy.config import ProxyConfig
 
 
 # manages a web scraper interface that allows setup and execution of data mining
 class Scraper(Agent):
-    def __init__(self, name: str, user_agent: UserAgent, proxy_name: str, credentials: Credentials, headless: bool) -> None:
+    def __init__(
+            self, name: str, user_agent: UserAgent, 
+            proxy_name: str, proxy_config: ProxyConfig, 
+            credentials: Credentials, headless: bool, 
+            window_size: tuple[int], 
+            window_position: tuple[int]
+        ) -> None:
+
         self.name = name
         self.credentials = credentials
-        # set parameters
-        super().__init__(user_agent=user_agent, proxy_name=proxy_name, headless=headless)
+        
+        super().__init__(
+            user_agent=user_agent, 
+            proxy_name=proxy_name, 
+            proxy_config=proxy_config,
+            headless=headless, 
+            window_position=window_position, 
+            window_size=window_size
+        )
 
     def start(self):
         # start the driver
-        self.driver = chrome.create_driver(user_agent=self.user_agent, proxy_name=self.proxy_name, headless=self.headless)
+        self.driver = chrome.create_driver(
+            user_agent=self.user_agent, proxy_name=self.proxy_name, headless=self.headless, window_size=self.window_size, window_position=self.window_position)
 
     # requires an active driver
     def setup(self):

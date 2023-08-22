@@ -11,7 +11,7 @@ android_str = "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTM
 android_str_1 = "Mozilla/5.0 (Linux; U; Android 4.0.3; de-ch; HTC Sensation Build/IML74K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
 
 
-def create_driver(user_agent: UserAgent, proxy_name: str=None, proxy_config: ProxyConfig=None, headless=True, window_size=(1400,900), window_position=(0,0)) -> selenium.webdriver.Chrome:
+def create_driver(user_agent: UserAgent, proxy_name: str, proxy_config: ProxyConfig, headless: bool, window_size: tuple, window_position=(0,0)) -> selenium.webdriver.Chrome:
     # capabilities
     capabilities = selenium.webdriver.DesiredCapabilities.CHROME.copy()
     capabilities["goog:loggingPrefs"] = { 'performance':'ALL' }
@@ -122,7 +122,7 @@ def set_user_agent_data(driver, user_agent):
 
 
 if __name__ == "__main__":
-    driver = create_driver(user_agent=UserAgent.DESKTOP, headless=False)
+    driver = create_driver(user_agent=UserAgent.DESKTOP, proxy_name=None, proxy_config=None, headless=False, window_size=(1300, 800), window_position=(50, 50))
     driver.get(url="https://www.google.com")
     time.sleep(600)
     driver.quit()
