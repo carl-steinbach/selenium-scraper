@@ -1,7 +1,7 @@
 import os
 import json
 import zipfile
-from selenium_scraper.config import config
+from selenium_scraper.config.config import config
 
 
 proxy_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "extensions")
