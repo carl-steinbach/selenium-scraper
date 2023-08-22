@@ -3,6 +3,7 @@ import selenium.webdriver
 import time
 from selenium_scraper.user_agent import UserAgent
 from selenium_scraper.proxy import manager
+from selenium_scraper.proxy.config import ProxyConfig
 
 
 ios_str = "userAgent=Mozilla/5.0  (iPhone; CPU iPhone OS 12_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like  Gecko) CriOS/101.0.4951.44 Mobile/15E148 Safari/604.1"
@@ -10,7 +11,7 @@ android_str = "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTM
 android_str_1 = "Mozilla/5.0 (Linux; U; Android 4.0.3; de-ch; HTC Sensation Build/IML74K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
 
 
-def create_driver(user_agent: UserAgent, proxy_name: str=None, headless=True, window_size=(1400,900), window_position=(0,0)) -> selenium.webdriver.Chrome:
+def create_driver(user_agent: UserAgent, proxy_name: str=None, proxy_config: ProxyConfig=None, headless=True, window_size=(1400,900), window_position=(0,0)) -> selenium.webdriver.Chrome:
     # capabilities
     capabilities = selenium.webdriver.DesiredCapabilities.CHROME.copy()
     capabilities["goog:loggingPrefs"] = { 'performance':'ALL' }
@@ -33,7 +34,7 @@ def create_driver(user_agent: UserAgent, proxy_name: str=None, headless=True, wi
         if not pycountry.countries.get(name=proxy_name):
             raise ValueError(f"invalid proxy name; got {proxy_name}")
     
-        options.add_extension(manager.get_path(country=proxy_name))
+        options.add_extension(manager.get_path(country=proxy_name, config=proxy_config))
 
     # headless mode
     if headless:

@@ -1,7 +1,7 @@
 import os
 import json
 import zipfile
-from selenium_scraper.config import config
+from selenium_scraper.proxy.config import ProxyConfig
 
 
 proxy_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "extensions")
@@ -9,21 +9,21 @@ zip_mode = zipfile.ZIP_DEFLATED
 
 
 # create the proxy extension and return the path
-def get_path(country: str) -> str:
+def get_path(country: str, config: ProxyConfig) -> str:
     if not os.path.isdir(proxy_dir):
         os.mkdir(proxy_dir)
 
-    if country not in config.proxy.countries:
+    if country not in config.locations:
         raise ValueError(
             f"proxy is unavailable in this country; got {country}")
 
-    return _create_zip(country=country)
+    return _create_zip(country=country, config=config)
 
 
 # create the chrome extension zip
-def _create_zip(country: str):
+def _create_zip(country: str, config: ProxyConfig):
     proxy_zip_path = os.path.join(proxy_dir, country, "proxy.zip")
-    country_pass = config.proxy.password + "_country-" + country
+    country_pass = config.password + "_country-" + country
 
     manifest_name = "manifest.json"
     manifest_path = os.path.join(proxy_dir, country, manifest_name)
@@ -76,7 +76,7 @@ def _create_zip(country: str):
             callbackFn,
             {urls: ["<all_urls>"]},
             ['blocking']
-    );""" % (config.proxy.scheme, config.proxy.host, config.proxy.port, config.proxy.username, country_pass)
+    );""" % (config.scheme, config.host, config.port, config.username, country_pass)
 
     if not os.path.isdir(os.path.join(proxy_dir, country)):
         os.mkdir(os.path.join(proxy_dir, country))
