@@ -32,7 +32,7 @@ def until_exists(parent: WebElement, locator: tuple, timeout: float, msg: str) -
     raise TimeoutException("wait until exists: " + msg)
 
 
-def until_exists(driver: Chrome or WebElement, locator: tuple, timeout: float, msg: str, number_of_elements: int) -> list(WebElement):
+def until_exists(driver: Chrome or WebElement, locator: tuple, timeout: float, msg: str, number_of_elements: int) -> list[WebElement]:
     start = time.time()
     while time.time() - start < timeout:
         try:
