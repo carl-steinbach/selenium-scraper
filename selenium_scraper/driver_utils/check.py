@@ -18,7 +18,7 @@ def if_exists(driver: Chrome, locator: tuple, timeout: float) -> WebElement:
     return None
 
 
-def if_exists(parent: WebElement, locator: tuple, timeout: float) -> WebElement:
+def if_exists_parent(parent: WebElement, locator: tuple, timeout: float) -> WebElement:
     start = time.time()
     while time.time() - start < timeout:
         try:

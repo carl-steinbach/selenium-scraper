@@ -21,7 +21,7 @@ def until_exists(driver: Chrome, locator: tuple, timeout: float, msg: str) -> We
     )
 
 
-def until_exists(parent: WebElement, locator: tuple, timeout: float, msg: str) -> WebElement:
+def until_exists_parent(parent: WebElement, locator: tuple, timeout: float, msg: str) -> WebElement:
     start = time.time()
     while time.time() - start < timeout:
         try:
@@ -32,11 +32,24 @@ def until_exists(parent: WebElement, locator: tuple, timeout: float, msg: str) -
     raise TimeoutException("wait until exists: " + msg)
 
 
-def until_exists(driver: Chrome or WebElement, locator: tuple, timeout: float, msg: str, number_of_elements: int) -> list[WebElement]:
+def until_exists_list(driver: Chrome, locator: tuple, timeout: float, msg: str, number_of_elements: int=0) -> list[WebElement]:
     start = time.time()
     while time.time() - start < timeout:
         try:
             list = driver.find_elements(*locator)
+            if list is not None and len(list) >= number_of_elements:
+                return list
+        except NoSuchElementException:
+            time.sleep(0.1)
+
+    raise TimeoutException("wait until exists: " + msg)
+
+
+def until_exists_list_parent(parent: WebElement, locator: tuple, timeout: float, msg: str, number_of_elements: int=0) -> list[WebElement]:
+    start = time.time()
+    while time.time() - start < timeout:
+        try:
+            list = parent.find_elements(*locator)
             if list is not None and len(list) >= number_of_elements:
                 return list
         except NoSuchElementException:

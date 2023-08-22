@@ -40,7 +40,6 @@ class Agent():
             window_position=self.window_position
         )
 
-
     # cleanup resources and stop the driver
     def quit(self):
         self.driver.quit()
@@ -48,13 +47,13 @@ class Agent():
     # wait until a condition is fulfilled
     def wait_until_exists(self, locator: tuple, parent: WebElement = None, msg: str = "", number_of_elements: int = None):
         if parent is None and number_of_elements is None:
-            return wait.until_exists(self.driver, locator=locator, timeout=self.wait_timeout, msg=msg)
+            return wait.until_exists(driver=self.driver, locator=locator, timeout=self.wait_timeout, msg=msg)
         if parent is not None and number_of_elements is None:
-            return wait.until_exists(parent, locator=locator, timeout=self.wait_timeout, msg=msg)
+            return wait.until_exists_parent(parent=parent, locator=locator, timeout=self.wait_timeout, msg=msg)
         if parent is None and number_of_elements is not None:
-            return wait.until_exists(self.driver, locator=locator, timeout=self.wait_timeout, msg=msg, number_of_elements=number_of_elements)
+            return wait.until_exists_list(self.driver, locator=locator, timeout=self.wait_timeout, msg=msg, number_of_elements=number_of_elements)
         if parent is not None and number_of_elements is not None:
-            return wait.until_exists(parent, locator=locator, timeout=self.wait_timeout, msg=msg, number_of_elements=number_of_elements)
+            return wait.until_exists_list_parent(parent, locator=locator, timeout=self.wait_timeout, msg=msg, number_of_elements=number_of_elements)
 
     def wait_until_stale(self, element: WebElement, msg: str = ""):
         return wait.until_stale(self.driver, element, self.wait_timeout, msg=msg)
@@ -84,7 +83,7 @@ class Agent():
     # check if an element fulfills a condition
     def check_if_exists(self, locator: tuple, parent: WebElement = None) -> bool:
         if parent is not None:
-            return check.if_exists(parent=parent, locator=locator, timeout=self.check_timeout)
+            return check.if_exists_parent(parent=parent, locator=locator, timeout=self.check_timeout)
         else:
             return check.if_exists(driver=self.driver, locator=locator, timeout=self.check_timeout)
 
