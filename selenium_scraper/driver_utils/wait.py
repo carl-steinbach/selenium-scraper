@@ -45,9 +45,9 @@ def until_exists(driver: Chrome or WebElement, locator: tuple, timeout: float, m
     raise TimeoutException("wait until exists: " + msg)
 
 
-def until_invisible(driver: Chrome, locator: tuple, timeout: float, msg: str) -> WebElement:
+def until_invisible(driver: Chrome, element: WebElement, timeout: float, msg: str) -> WebElement:
     return WebDriverWait(driver, timeout).until(
-        EC.invisibility_of_element_located(locator),
+        EC.invisibility_of_element(element),
         message="wait until invisible: " + msg,
     )
 

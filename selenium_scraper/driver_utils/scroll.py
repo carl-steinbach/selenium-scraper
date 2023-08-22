@@ -16,9 +16,9 @@ def until_loaded(driver: Chrome, body: WebElement, locator: tuple, timeout: floa
     raise TimeoutException(msg="scroll_until_loaded: " + msg)
         
 
-def into_view(driver: Chrome, body: WebElement, element: WebElement, window_size: int):
+def into_view(driver: Chrome, body: WebElement, element: WebElement, window_height: int):
     viewport_distance = driver.execute_script("return arguments[0].getBoundingClientRect().top", element)
-    driver.execute_script("arguments[0].scrollTop += arguments[1]", body, viewport_distance - window_size/2)
+    driver.execute_script("arguments[0].scrollTop += arguments[1]", body, viewport_distance - window_height/2)
 
 
 def until_timeout(driver: Chrome, body: WebElement, timeout: float):
