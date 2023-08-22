@@ -35,7 +35,7 @@ class Agent():
         self.driver = chrome.create_driver(
             user_agent=self.user_agent,
             proxy_name=self.proxy_name,
-            proxy_config=ProxyConfig,
+            proxy_config=self.proxy_config,
             headless=self.headless,
             window_size=self.window_size,
             window_position=self.window_position

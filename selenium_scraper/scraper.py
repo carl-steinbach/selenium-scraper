@@ -27,11 +27,6 @@ class Scraper(Agent):
             window_size=window_size
         )
 
-    def start(self):
-        # start the driver
-        self.driver = chrome.create_driver(
-            user_agent=self.user_agent, proxy_name=self.proxy_name, headless=self.headless, window_size=self.window_size, window_position=self.window_position)
-
     # requires an active driver
     def setup(self):
         # navigate to the desired location, log in etc.
@@ -41,10 +36,6 @@ class Scraper(Agent):
     def scrape(self):
         # collect the actual data
         pass
-
-    def quit(self):
-        # cleanup resources and stop the driver
-        self.driver.quit()
 
     def log(self, msg):
         print(f"[{self.name}] {msg}")
