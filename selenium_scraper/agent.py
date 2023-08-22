@@ -6,10 +6,9 @@ from selenium_scraper.driver_utils import wait, find, check, parse, scroll, util
 from selenium.webdriver.remote.webelement import WebElement
 from selenium_scraper.proxy.config import ProxyConfig
 
-# manages a webdriver and utility methods
 
-
-class Agent():
+class Agent():  
+    # manages a webdriver and utility methods
     def __init__(
         self, user_agent: UserAgent,
             proxy_name: str,
@@ -30,8 +29,9 @@ class Agent():
         self.check_timeout = 0.1
         self.driver: Chrome = None
 
+
+    # start the driver
     def start(self):
-        # start the driver
         self.driver = chrome.create_driver(
             user_agent=self.user_agent,
             proxy_name=self.proxy_name,
@@ -41,8 +41,9 @@ class Agent():
             window_position=self.window_position
         )
 
+
+    # cleanup resources and stop the driver
     def quit(self):
-        # cleanup resources and stop the driver
         self.driver.quit()
 
     # wait until a condition is fulfilled
@@ -72,8 +73,8 @@ class Agent():
     def wait_until_invisible(self, element: WebElement, msg: str = ""):
         return wait.until_invisible(driver=self.driver, element=element, timeout=self.wait_timeout, msg=msg)
 
-    def scroll_into_view(self, body: WebElement, element: WebElement, window_height: int):
-        return scroll.into_view(driver=self.driver, body=body, element=element, window_height=window_height)
+    def scroll_into_view(self, body: WebElement, element: WebElement):
+        return scroll.into_view(driver=self.driver, body=body, element=element, window_height=self.window_size[1])
 
     def scroll_until_loaded(self, body: WebElement, locator: tuple, msg: str = ""):
         return scroll.until_loaded(driver=self.driver, body=body, locator=locator, timeout=self.scroll_timeout, msg=msg)
