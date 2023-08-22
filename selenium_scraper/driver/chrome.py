@@ -3,7 +3,6 @@ import selenium.webdriver
 import time
 from selenium_scraper.user_agent import UserAgent
 from selenium_scraper.proxy import manager
-from selenium_scraper.config.config import config
 
 
 ios_str = "userAgent=Mozilla/5.0  (iPhone; CPU iPhone OS 12_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like  Gecko) CriOS/101.0.4951.44 Mobile/15E148 Safari/604.1"
