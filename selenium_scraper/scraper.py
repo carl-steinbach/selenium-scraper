@@ -1,3 +1,4 @@
+"A specialized agent used to structure web scraping"
 from selenium_scraper.user_agent import UserAgent
 from selenium_scraper.credentials import Credentials
 from selenium_scraper.driver import chrome
@@ -5,7 +6,6 @@ from selenium_scraper.agent import Agent
 from selenium_scraper.proxy.config import ProxyConfig
 
 
-# manages a web scraper interface that allows setup and execution of data mining
 class Scraper(Agent):
     def __init__(
             self, name: str, user_agent: UserAgent, 
