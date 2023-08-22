@@ -5,12 +5,12 @@ import os
 
 class ProxyTest(unittest.TestCase):
     def test_create_proxy(self):
-        proxy_path = proxy_manager.get("Germany")
+        proxy_path = proxy_manager.get_path("Germany")
         self.assertTrue(os.path.isfile(proxy_path))
 
     def test_invalid_country(self):
         try:
-            path = proxy_manager.get("")
+            path = proxy_manager.get_path("")
         except ValueError:
             return
         

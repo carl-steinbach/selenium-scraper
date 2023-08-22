@@ -8,12 +8,11 @@ proxy_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "extensions
 zip_mode = zipfile.ZIP_DEFLATED
 
 
-def get(country: str) -> str:
-    # create proxy dir if not exists
+# create the proxy extension and return the path
+def get_path(country: str) -> str:
     if not os.path.isdir(proxy_dir):
         os.mkdir(proxy_dir)
 
-    # check if proxy is available
     if country not in config.proxy.countries:
         raise ValueError(
             f"proxy is unavailable in this country; got {country}")
@@ -21,8 +20,8 @@ def get(country: str) -> str:
     return _create_zip(country=country)
 
 
+# create the chrome extension zip
 def _create_zip(country: str):
-    # create the chrome extension zip
     proxy_zip_path = os.path.join(proxy_dir, country, "proxy.zip")
     country_pass = config.proxy.password + "_country-" + country
 

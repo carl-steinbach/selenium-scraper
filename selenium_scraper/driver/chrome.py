@@ -1,7 +1,7 @@
 import pycountry
 import selenium.webdriver
 import time
-from selenium_scraper.driver.user_agent import UserAgent
+from selenium_scraper.user_agent import UserAgent
 from selenium_scraper.proxy import manager
 from selenium_scraper.config import config
 
@@ -11,7 +11,7 @@ android_str = "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTM
 android_str_1 = "Mozilla/5.0 (Linux; U; Android 4.0.3; de-ch; HTC Sensation Build/IML74K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
 
 
-def get_chome_driver(user_agent: UserAgent, proxy_name: str=None, headless=True, window_size=(1400,900), window_position=(0,0)) -> selenium.webdriver.Chrome:
+def create_chrome_driver(user_agent: UserAgent, proxy_name: str=None, headless=True, window_size=(1400,900), window_position=(0,0)) -> selenium.webdriver.Chrome:
     # capabilities
     capabilities = selenium.webdriver.DesiredCapabilities.CHROME.copy()
     capabilities["goog:loggingPrefs"] = { 'performance':'ALL' }
@@ -28,16 +28,19 @@ def get_chome_driver(user_agent: UserAgent, proxy_name: str=None, headless=True,
     options.add_argument("--start-maximized")
     options.add_argument("--enable-logging --v=1");
     options.set_capability("goog:loggingPrefs", { 'performance':'ALL' });
-    #options.add_argument("--incognito")
 
+    # add proxy
     if proxy_name:
         if not pycountry.countries.get(name=proxy_name):
             raise ValueError(f"invalid proxy name; got {proxy_name}")
     
-        options.add_extension(manager.get(country=proxy_name))
+        options.add_extension(manager.get_path(country=proxy_name))
+
+    # headless mode
     if headless:
         options.add_argument("--headless=new")
     
+    # user agent
     match user_agent:
         case UserAgent.IOS:
             user_agent_str = '--user-agent=\"' + ios_str + '\"'
@@ -52,11 +55,10 @@ def get_chome_driver(user_agent: UserAgent, proxy_name: str=None, headless=True,
         case UserAgent.DESKTOP:
             options.add_argument("--window-size=1920,1080")
 
-    
     driver = selenium.webdriver.Chrome(options=options) #desired_capabilities=capabilities)
 
     if user_agent != UserAgent.DESKTOP:
-        set_platform(driver=driver, user_agent=user_agent)
+        _set_platform(driver=driver, user_agent=user_agent)
         set_user_agent_data(driver=driver, user_agent=user_agent)
         
     driver.delete_all_cookies()
@@ -66,7 +68,7 @@ def get_chome_driver(user_agent: UserAgent, proxy_name: str=None, headless=True,
     return driver
 
 
-def set_platform(driver, user_agent):
+def _set_platform(driver, user_agent):
     source = """
     Object.defineProperty(
         navigator,
@@ -79,12 +81,12 @@ def set_platform(driver, user_agent):
             }
         }
     );
-    """ % (get_platform(user_agent=user_agent))
+    """ % (_get_platform(user_agent=user_agent))
 
     driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {"source": source})
 
 
-def get_platform(user_agent):
+def _get_platform(user_agent):
     if user_agent == UserAgent.IOS:
         return "iPhone"
     if user_agent == UserAgent.ANDROID:
@@ -120,7 +122,7 @@ def set_user_agent_data(driver, user_agent):
 
 
 if __name__ == "__main__":
-    driver = get_chome_driver(user_agent=UserAgent.DESKTOP, headless=False)
+    driver = create_chrome_driver(user_agent=UserAgent.DESKTOP, headless=False)
     driver.get(url="https://www.google.com")
     time.sleep(600)
     driver.quit()
