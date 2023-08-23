@@ -100,7 +100,7 @@ class Agent():
         return find.by_xpath(driver=self.driver, xpath_list=xpath_list)
 
     def try_click(self, element: WebElement, msg: str = "") -> bool:
-        return utils.try_click(element=element, timeout=self, msg=msg)
+        return utils.try_click(element=element, timeout=self.wait_timeout, msg=msg)
 
     def get_text(self, element: WebElement, msg: str = "") -> str:
         return parse.get_text(element=element, timeout=self.wait_timeout, msg=msg)
