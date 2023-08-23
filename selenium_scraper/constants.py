@@ -1,5 +1,5 @@
-import enum
+from enum import Enum
 
-class Status(enum):
+class Status(Enum):
     FAILURE = -1
     SUCCESS = 0
