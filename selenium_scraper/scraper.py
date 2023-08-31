@@ -52,5 +52,5 @@ class Scraper(Agent):
 
         self.quit()
 
-def log(self, msg):
-    print(f"[{self.name}] {msg}")
+    def log(self, msg):
+        print(f"[{self.name}] {msg}")
