@@ -52,6 +52,9 @@ class Scraper(Agent):
                 for iteration in self.iterations:
                     self.scrape()
                     print(f"----------------- {iteration}\{self.iterations} ------------------")
+            except KeyboardInterrupt:
+                self.quit()
+                exit(1)
             except:
                 print(traceback.format_exc())
                 self.quit()
