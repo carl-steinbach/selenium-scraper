@@ -49,7 +49,7 @@ class Scraper(Agent):
             try:
                 self.start()
                 self.setup()
-                for iteration in self.iterations:
+                for iteration in range(self.iterations):
                     self.scrape()
                     print(f"----------------- {iteration}\{self.iterations} ------------------")
             except KeyboardInterrupt:
