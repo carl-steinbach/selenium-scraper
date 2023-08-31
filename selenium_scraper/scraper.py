@@ -4,6 +4,7 @@ from selenium_scraper.credentials import Credentials
 from selenium_scraper.driver import chrome
 from selenium_scraper.agent import Agent
 from selenium_scraper.proxy.config import ProxyConfig
+from selenium_scraper.constants import Status
 from time import time
 
 
@@ -21,6 +22,7 @@ class Scraper(Agent):
         self.credentials = credentials
         self.max_retries = max_retries
         self.retries = 0
+        self.iterations = 100
         
         super().__init__(
             user_agent=user_agent, 
@@ -42,15 +44,15 @@ class Scraper(Agent):
         pass
 
     def run(self):
-        self.start()
-        try:
-            self.setup()
-            self.scrape()
-        except:
-            self.quit()
-            raise
-
-        self.quit()
+        while True:
+            try:
+                self.start()
+                self.setup()
+                for iteration in self.iterations:
+                    self.scrape()
+                    print(f"----------------- {iteration}\{self.iterations} ------------------")
+            except:
+                self.quit()
 
     def log(self, msg):
         print(f"[{self.name}] {msg}")
