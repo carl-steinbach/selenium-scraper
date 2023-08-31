@@ -5,6 +5,11 @@ from selenium.webdriver import Chrome
 from selenium_scraper.driver_utils import wait, find, check, parse, scroll, utils
 from selenium.webdriver.remote.webelement import WebElement
 from selenium_scraper.proxy.config import ProxyConfig
+import time
+import json
+
+
+save_url = """old_wop = window.open; function new_wop(url) { document.g_url = url }; window.open = new_wop"""
 
 class Agent():  
     def __init__(
@@ -25,6 +30,7 @@ class Agent():
         self.scroll_timeout = 30.0
         self.wait_timeout = 60.0
         self.check_timeout = 0.1
+        self.redirect_timeout = 3.0
         self.driver: Chrome = None
 
 
@@ -89,7 +95,7 @@ class Agent():
     def check_if_attribute_exists(self, element: WebElement, attribute: str) -> bool:
         return check.if_attribute_exists(element=element, attribute=attribute)
 
-    def check_if_alert_exists(self, msg: str = "") -> bool:
+    def check_if_alert_exists(self, msg: str = ""):
         return check.if_alert_exists(driver=self.driver, timeout=self.check_timeout, msg=msg)
 
     def check_if_stale(self, element: WebElement, msg: str = "") -> bool:
@@ -104,3 +110,39 @@ class Agent():
 
     def get_text(self, element: WebElement, msg: str = "") -> str:
         return parse.get_text(element=element, timeout=self.wait_timeout, msg=msg)
+
+    def get_button_link(self, button: WebElement):
+        self.driver.execute_script(save_url)
+        button.click()
+        url = self.driver.execute_script("return document.g_url")
+        return url
+    
+    def get_redirects(self, url):
+        self.driver.get_log("performance")
+        self.driver.get(url)
+        requests = []
+
+        while True:
+            time.sleep(self.redirect_timeout)
+            new_requests = filter(self._valid_redirect, self.driver.get_log("performance"))
+            if len(new_requests) == 0:
+                alert = self.check_if_alert_exists()
+                if (alert):
+                    alert.accept()
+                else:
+                    break
+            else:
+                requests += new_requests
+
+        redirect_urls = [r["params"]["url"] for r in requests]
+        return redirect_urls
+    
+    def _valid_redirect(log):
+        msg = json.loads(log["message"])["message"]
+        if msg["method"] != "Network.responseReceived":
+            return False
+
+        if msg["params"]["type"] != "Document":
+            return False
+        
+        return True

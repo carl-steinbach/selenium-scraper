@@ -4,6 +4,7 @@ from selenium_scraper.credentials import Credentials
 from selenium_scraper.driver import chrome
 from selenium_scraper.agent import Agent
 from selenium_scraper.proxy.config import ProxyConfig
+from time import time
 
 
 class Scraper(Agent):
@@ -51,5 +52,5 @@ class Scraper(Agent):
 
         self.quit()
 
-    def log(self, msg):
-        print(f"[{self.name}] {msg}")
+def log(self, msg):
+    print(f"[{self.name}] {msg}")
