@@ -6,6 +6,7 @@ from selenium_scraper.agent import Agent
 from selenium_scraper.proxy.config import ProxyConfig
 from selenium_scraper.constants import Status
 from time import time
+import traceback
 
 
 class Scraper(Agent):
@@ -52,6 +53,7 @@ class Scraper(Agent):
                     self.scrape()
                     print(f"----------------- {iteration}\{self.iterations} ------------------")
             except:
+                print(traceback.format_exc())
                 self.quit()
 
     def log(self, msg):
