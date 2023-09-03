@@ -6,7 +6,6 @@ from selenium_scraper.proxy.providers import packetstream
 
 
 proxy_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "extensions")
-zip_mode = zipfile.ZIP_DEFLATED
 available_providers = ["packetstream"]
 
 
