@@ -29,7 +29,7 @@ class Agent():
 
         self.scroll_timeout = 30.0
         self.wait_timeout = 60.0
-        self.check_timeout = 0.1
+        self.check_timeout = 1.0
         self.redirect_timeout = 3.0
         self.driver: Chrome = None
 
