@@ -59,5 +59,20 @@ class Scraper(Agent):
                 print(traceback.format_exc())
                 self.quit()
 
+    def run_once(self):
+        try:
+            self.start()
+            self.setup()
+            for iteration in range(self.iterations):
+                self.scrape()
+                print(f"----------------- {iteration}\{self.iterations} ------------------")
+        except KeyboardInterrupt:
+            self.quit()
+            exit(1)
+        except:
+            print(traceback.format_exc())
+        
+        self.quit()
+
     def log(self, msg):
         print(f"[{self.name}] {msg}")
