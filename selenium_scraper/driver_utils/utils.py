@@ -1,6 +1,7 @@
+import time
+
 from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException
 from selenium.webdriver.remote.webelement import WebElement
-import time
 
 
 def try_click(element: WebElement, timeout: float, msg: str):
@@ -13,6 +14,3 @@ def try_click(element: WebElement, timeout: float, msg: str):
             time.sleep(0.1)
 
     raise TimeoutException(msg="try click" + msg)
-
-
-

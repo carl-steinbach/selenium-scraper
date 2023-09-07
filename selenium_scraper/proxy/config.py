@@ -1,6 +1,4 @@
-
-
-class ProxyConfig():
+class ProxyConfig:
     def __init__(self, host, port, scheme, locations, username, password, provider) -> None:
         self.host = host
         self.port = port
@@ -11,13 +9,13 @@ class ProxyConfig():
         self.provider = provider
 
 
-def loadProxyConfig(proxyDict) -> ProxyConfig:
+def load_proxy_config(proxy_dict) -> ProxyConfig:
     return ProxyConfig(
-            host=proxyDict["host"], 
-            port=proxyDict["port"], 
-            scheme=proxyDict["scheme"], 
-            locations=proxyDict["locations"], 
-            username=proxyDict["username"], 
-            password=proxyDict["password"], 
-            provider=proxyDict["provider"]
-        )
+        host=proxy_dict["host"],
+        port=proxy_dict["port"],
+        scheme=proxy_dict["scheme"],
+        locations=proxy_dict["locations"],
+        username=proxy_dict["username"],
+        password=proxy_dict["password"],
+        provider=proxy_dict["provider"]
+    )

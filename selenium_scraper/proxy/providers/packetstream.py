@@ -1,9 +1,11 @@
+import json
 import os
 import zipfile
-import json
+
 from selenium_scraper.proxy.config import ProxyConfig
 
-# create the chrome extension zip
+
+# Create the Chrome extension zip file
 def create_zip(country: str, config: ProxyConfig, proxy_dir: str):
     zip_mode = zipfile.ZIP_DEFLATED
     proxy_zip_path = os.path.join(proxy_dir, country, "proxy.zip")
@@ -72,8 +74,8 @@ def create_zip(country: str, config: ProxyConfig, proxy_dir: str):
         f.write(background)
 
     # compress to zip
-    with zipfile.ZipFile(proxy_zip_path, mode="w", compression=zip_mode) as zip:
-        zip.write(manifest_path, "manifest.json", compress_type=zip_mode)
-        zip.write(background_path, "background.js", compress_type=zip_mode)
+    with zipfile.ZipFile(proxy_zip_path, mode="w", compression=zip_mode) as extension_zip:
+        extension_zip.write(manifest_path, "manifest.json", compress_type=zip_mode)
+        extension_zip.write(background_path, "background.js", compress_type=zip_mode)
 
     return proxy_zip_path
