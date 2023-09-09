@@ -71,7 +71,10 @@ class Scraper(Agent):
         except Exception:
             print(traceback.format_exc())
 
-        self.quit()
+        try:
+            self.quit()
+        except:
+            return
 
     def log(self, msg):
         print(f"[{self.name}] {msg}")
