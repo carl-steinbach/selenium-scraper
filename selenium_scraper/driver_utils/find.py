@@ -1,6 +1,7 @@
+from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
-from selenium.webdriver import Chrome
+
 
 def by_xpath(driver: Chrome, xpath_list: list[str]) -> WebElement:
     xpath = ""
@@ -11,8 +12,5 @@ def by_xpath(driver: Chrome, xpath_list: list[str]) -> WebElement:
         except:
             print(f"could not find {xpath_list}")
             return None
-    
+
     return result
-
-
-
