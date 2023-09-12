@@ -11,8 +11,8 @@ class Scraper(Agent):
     def __init__(
             self, name: str,
             user_agent: UserAgent,
-            proxy_country: str,
-            proxy_config: ProxyConfig,
+            proxy_country: str | None,
+            proxy_config: ProxyConfig | None,
             credentials: Credentials,
             headless: bool,
             max_retries: int,
