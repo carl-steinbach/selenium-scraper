@@ -108,8 +108,8 @@ class Agent:
         return check.if_stale(driver=self.driver, element=element, msg=msg)
 
     # find elements in different ways
-    def find_by_xpath(self, xpath_list: list[str]):
-        return find.by_xpath(driver=self.driver, xpath_list=xpath_list)
+    def find_by_xpath(self, xpath_list: list[str], verbose: str = False):
+        return find.by_xpath(driver=self.driver, xpath_list=xpath_list, verbose=verbose)
 
     def try_click(self, element: WebElement, msg: str = "") -> bool:
         return utils.try_click(element=element, timeout=self.wait_timeout, msg=msg)
