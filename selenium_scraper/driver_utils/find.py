@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
 
-def by_xpath(driver: Chrome, xpath_list: list[str], verbose: str) -> WebElement | None:
+def by_xpath(driver: Chrome, xpath_list: list[str], verbose: bool) -> WebElement | None:
     xpath = ""
     result = None
     for xpath_part in xpath_list:
