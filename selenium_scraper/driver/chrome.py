@@ -37,7 +37,7 @@ def create_driver(
     options.set_capability("goog:loggingPrefs", {'performance': 'ALL'})
 
     # add proxy
-    if proxy_country:
+    if proxy_country and proxy_config:
         if not pycountry.countries.get(name=proxy_country):
             raise ValueError(f"invalid proxy name; got {proxy_country}")
 
@@ -133,14 +133,14 @@ if __name__ == "__main__":
         host="proxy.packetstream.io",
         port=31112, scheme="http",
         locations=["Germany", "United States"],
-        username="testuser",
-        password="testpass",
+        username="carlalmedia",
+        password="lIeEidXf3StEc0ll",
         provider="Packetstream"
     )
 
-    d = create_driver(user_agent=UserAgent.DESKTOP, proxy_country=None, proxy_config=None,
+    d = create_driver(user_agent=UserAgent.DESKTOP, proxy_country="Germany", proxy_config=proxyConfig,
                       headless=False,
                       window_size=(1300, 800), window_position=(50, 50))
     d.get(url="https://www.google.com")
-    time.sleep(600)
+    time.sleep(6000)
     d.quit()
