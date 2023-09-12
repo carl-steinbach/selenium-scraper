@@ -73,7 +73,7 @@ class Scraper(Agent):
 
         try:
             self.quit()
-        except:
+        except Exception:
             return
 
     def log(self, msg):

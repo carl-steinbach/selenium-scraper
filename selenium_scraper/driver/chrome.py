@@ -129,7 +129,17 @@ def set_user_agent_data(driver, user_agent):
 
 
 if __name__ == "__main__":
-    d = create_driver(user_agent=UserAgent.DESKTOP, proxy_country=None, proxy_config=None, headless=False,
+    proxyConfig = ProxyConfig(
+        host="proxy.packetstream.io",
+        port=31112, scheme="http",
+        locations=["Germany", "United States"],
+        username="testuser",
+        password="testpass",
+        provider="Packetstream"
+    )
+
+    d = create_driver(user_agent=UserAgent.DESKTOP, proxy_country=None, proxy_config=None,
+                      headless=False,
                       window_size=(1300, 800), window_position=(50, 50))
     d.get(url="https://www.google.com")
     time.sleep(600)

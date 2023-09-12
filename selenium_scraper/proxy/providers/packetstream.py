@@ -7,12 +7,13 @@ from selenium_scraper.proxy.config import ProxyConfig
 
 # Create the Chrome extension zip file
 def create_zip(country: str, config: ProxyConfig, proxy_dir: str):
+    formatted_country = country.replace(" ", "")
     zip_mode = zipfile.ZIP_DEFLATED
-    proxy_zip_path = os.path.join(proxy_dir, country, "proxy.zip")
-    country_pass = config.password + "_country-" + country
+    proxy_zip_path = os.path.join(proxy_dir, formatted_country, "proxy.zip")
+    country_pass = config.password + "_country-" + formatted_country
 
     manifest_name = "manifest.json"
-    manifest_path = os.path.join(proxy_dir, country, manifest_name)
+    manifest_path = os.path.join(proxy_dir, formatted_country, manifest_name)
     manifest = {
         "version": "1.0.0",
         "manifest_version": 2,
@@ -33,7 +34,7 @@ def create_zip(country: str, config: ProxyConfig, proxy_dir: str):
     }
 
     background_name = "background.js"
-    background_path = os.path.join(proxy_dir, country, background_name)
+    background_path = os.path.join(proxy_dir, formatted_country, background_name)
     background = """
     var config = {
         mode: "fixed_servers",
@@ -64,8 +65,8 @@ def create_zip(country: str, config: ProxyConfig, proxy_dir: str):
             ['blocking']
     );""" % (config.scheme, config.host, config.port, config.username, country_pass)
 
-    if not os.path.isdir(os.path.join(proxy_dir, country)):
-        os.mkdir(os.path.join(proxy_dir, country))
+    if not os.path.isdir(os.path.join(proxy_dir, formatted_country)):
+        os.mkdir(os.path.join(proxy_dir, formatted_country))
     # write manifest.json and background.js files
     with open(manifest_path, mode="w+") as f:
         json.dump(manifest, f, indent=4)
