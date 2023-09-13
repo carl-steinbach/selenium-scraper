@@ -17,7 +17,9 @@ class Scraper(Agent):
             headless: bool,
             max_retries: int,
             window_size: tuple[int, int],
-            window_position: tuple[int, int]
+            window_position: tuple[int, int],
+            verbose: bool,
+            iterations: int
     ) -> None:
         super().__init__(
             user_agent=user_agent,
@@ -31,32 +33,39 @@ class Scraper(Agent):
         self.credentials = credentials
         self.max_retries = max_retries
         self.retries = 0
-        self.iterations = 100
+        self.iterations = iterations
+        self.verbose = verbose
 
     # requires an active driver
     def setup(self):
-        # navigate to the desired location, log in etc.
+        """Prepare the scraping session."""
         pass
 
     # requires setup to be complete
     def scrape(self):
-        # collect the actual data
+        """Collect and parse data."""
         pass
 
     def run(self):
+        """Let the scraper setup and scrape continuosly until the maximum retries are reached."""
         while True:
             try:
                 self.start()
                 self.setup()
                 for iteration in range(self.iterations):
                     self.scrape()
-                    print(f"----------------- {iteration} \\ {self.iterations} ------------------")
+                    print(
+                        f"----------------- "
+                        f"[iterations: {iteration}\\{self.iterations}, retries: {self.retries}\\{self.max_retries}]"
+                        f"------------------ "
+                    )
             except KeyboardInterrupt:
                 self.quit()
                 exit(1)
             except Exception:
                 print(traceback.format_exc())
                 self.quit()
+                self.retries += 1
 
     def run_once(self):
         try:
@@ -78,3 +87,7 @@ class Scraper(Agent):
 
     def log(self, msg):
         print(f"[{self.name}] {msg}")
+
+    def info(self, msg):
+        if self.verbose:
+            self.log(msg)
