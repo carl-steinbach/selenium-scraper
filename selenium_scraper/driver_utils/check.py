@@ -11,7 +11,7 @@ from selenium.webdriver.common.alert import Alert
 
 def if_exists(driver: Chrome, locator: tuple, timeout: float) -> WebElement | None:
     start = time.time()
-    while time.time() - start > timeout:
+    while time.time() - start < timeout:
         try:
             return driver.find_element(*locator)
         except NoSuchElementException:
