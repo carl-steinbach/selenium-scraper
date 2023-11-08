@@ -1,7 +1,7 @@
 import time
 
-import pycountry
 import selenium.webdriver
+from selenium_stealth import stealth
 
 from selenium_scraper.proxy import manager
 from selenium_scraper.proxy.config import ProxyConfig
@@ -17,7 +17,7 @@ android_str_1 = ("Mozilla/5.0 (Linux; U; Android 4.0.3; de-ch; HTC Sensation Bui
 
 def create_driver(
         user_agent: UserAgent, proxy_country: str | None, proxy_config: ProxyConfig | None, headless: bool,
-        window_size: tuple, window_position=(0, 0)
+        window_size: tuple, window_position=(0, 0), enable_stealth: bool = True
 ) -> selenium.webdriver.Chrome:
     # capabilities
     capabilities = selenium.webdriver.DesiredCapabilities.CHROME.copy()
@@ -38,9 +38,6 @@ def create_driver(
 
     # add proxy
     if proxy_country and proxy_config:
-        if not pycountry.countries.get(name=proxy_country):
-            raise ValueError(f"invalid proxy name; got {proxy_country}")
-
         options.add_extension(manager.get_proxy_path(country=proxy_country, config=proxy_config))
 
     # headless mode
@@ -63,6 +60,15 @@ def create_driver(
             options.add_argument("--window-size=1920,1080")
 
     driver = selenium.webdriver.Chrome(options=options)  # desired_capabilities=capabilities)
+    if enable_stealth:
+        stealth(driver,
+                languages=["en-US", "en"],
+                vendor="Google Inc.",
+                platform=_get_platform(user_agent),
+                webgl_vendor="Intel Inc.",
+                renderer="Intel Iris OpenGL Engine",
+                fix_hairline=True,
+                )
 
     if user_agent != UserAgent.DESKTOP:
         _set_platform(driver=driver, user_agent=user_agent)
@@ -99,7 +105,7 @@ def _get_platform(user_agent):
     if user_agent == UserAgent.ANDROID:
         return "Android"
     if user_agent == UserAgent.DESKTOP:
-        return "MacIntel"
+        return "Win32"
 
 
 def set_user_agent_data(driver, user_agent):
@@ -132,15 +138,15 @@ if __name__ == "__main__":
     proxyConfig = ProxyConfig(
         host="proxy.packetstream.io",
         port=31112, scheme="http",
-        locations=["Germany", "United States"],
+        locations=["germany", "united-states"],
         username="carlalmedia",
         password="lIeEidXf3StEc0ll",
         provider="Packetstream"
     )
 
-    d = create_driver(user_agent=UserAgent.DESKTOP, proxy_country="Germany", proxy_config=proxyConfig,
+    d = create_driver(user_agent=UserAgent.DESKTOP, proxy_country=None, proxy_config=proxyConfig,
                       headless=False,
                       window_size=(1300, 800), window_position=(50, 50))
-    d.get(url="https://www.google.com")
+    d.get(url="https://proxy.incolumitas.com/proxy_detect.html")
     time.sleep(6000)
     d.quit()

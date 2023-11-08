@@ -7,7 +7,7 @@ from selenium_scraper.proxy.config import ProxyConfig
 
 # Create the Chrome extension zip file
 def create_zip(country: str, config: ProxyConfig, proxy_dir: str):
-    formatted_country = country.replace(" ", "")
+    formatted_country = country.replace("-", "")
     zip_mode = zipfile.ZIP_DEFLATED
     proxy_zip_path = os.path.join(proxy_dir, formatted_country, "proxy.zip")
     country_pass = config.password + "_country-" + formatted_country

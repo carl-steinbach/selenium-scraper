@@ -9,7 +9,8 @@ from selenium_scraper.user_agent import UserAgent
 
 class Scraper(Agent):
     def __init__(
-            self, name: str,
+            self,
+            name: str,
             user_agent: UserAgent,
             proxy_country: str | None,
             proxy_config: ProxyConfig | None,
