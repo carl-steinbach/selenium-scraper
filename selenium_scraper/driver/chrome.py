@@ -1,7 +1,9 @@
+import pathlib
 import time
 
-import pycountry
 import selenium.webdriver
+import undetected_chromedriver
+from selenium_stealth import stealth
 
 from selenium_scraper.proxy import manager
 from selenium_scraper.proxy.config import ProxyConfig
@@ -17,31 +19,34 @@ android_str_1 = ("Mozilla/5.0 (Linux; U; Android 4.0.3; de-ch; HTC Sensation Bui
 
 def create_driver(
         user_agent: UserAgent, proxy_country: str | None, proxy_config: ProxyConfig | None, headless: bool,
-        window_size: tuple, window_position=(0, 0)
+        window_size: tuple, window_position: tuple[int, int], enable_stealth: bool, user_data_dir: str | None
 ) -> selenium.webdriver.Chrome:
-    # capabilities
-    capabilities = selenium.webdriver.DesiredCapabilities.CHROME.copy()
-    capabilities["goog:loggingPrefs"] = {'performance': 'ALL'}
 
     # options
-    prefs = {"credentials_enable_service": False,
-             "profile.password_manager_enabled": False}
-    options = selenium.webdriver.ChromeOptions()
-    options.add_experimental_option("prefs", prefs)
-    options.add_experimental_option("excludeSwitches", ['enable-automation'])
-    options.add_argument('--disable-blink-features=AutomationControlled')
-    options.add_experimental_option('useAutomationExtension', False)
+    # prefs = {"credentials_enable_service": False,
+    #          "profile.password_manager_enabled": False}
+    # options = selenium.webdriver.ChromeOptions()
+    options = undetected_chromedriver.options.ChromeOptions()
+    # options.add_experimental_option("prefs", prefs)
+    # options.add_experimental_option("excludeSwitches", ['enable-automation'])
+    # options.add_argument('--disable-blink-features=AutomationControlled')
+    # options.add_experimental_option('useAutomationExtension', False)
     options.add_argument("--disable-plugins-discovery")
     options.add_argument("--start-maximized")
     options.add_argument("--enable-logging --v=1")
     options.set_capability("goog:loggingPrefs", {'performance': 'ALL'})
 
+    if user_data_dir:
+        path_to_user_data_dir = pathlib.Path(__file__).parent.resolve().joinpath("profiles")
+        path_to_user_data_dir = path_to_user_data_dir.joinpath(user_data_dir).as_posix()
+        options.add_argument(f"--user-data-dir={path_to_user_data_dir}")
+
     # add proxy
     if proxy_country and proxy_config:
-        if not pycountry.countries.get(name=proxy_country):
-            raise ValueError(f"invalid proxy name; got {proxy_country}")
-
-        options.add_extension(manager.get_proxy_path(country=proxy_country, config=proxy_config))
+        # options.add_extension(manager.get_proxy_path(country=proxy_country, config=proxy_config))
+        proxy_path = pathlib.Path(__file__).parent.parent.resolve().joinpath("proxy", "extensions")
+        proxy_path = proxy_path.joinpath(manager.get_proxy_path(country=proxy_country, config=proxy_config))
+        options.add_argument(f"--load-extension={proxy_path.as_posix()}")
 
     # headless mode
     if headless:
@@ -60,17 +65,28 @@ def create_driver(
             mobile_emulation = {"deviceName": "Nexus 5"}
             options.add_experimental_option("mobileEmulation", mobile_emulation)
         case UserAgent.DESKTOP:
-            options.add_argument("--window-size=1920,1080")
+            # options.add_argument("--window-size=1920,1080")
+            pass
 
-    driver = selenium.webdriver.Chrome(options=options)  # desired_capabilities=capabilities)
+    # driver = selenium.webdriver.Chrome(options=options)  # desired_capabilities=capabilities)
+    driver = undetected_chromedriver.Chrome(options=options)
+    if enable_stealth:
+        stealth(driver,
+                languages=["en-US", "en"],
+                vendor="Google Inc.",
+                platform=_get_platform(user_agent),
+                webgl_vendor="Intel Inc.",
+                renderer="Intel Iris OpenGL Engine",
+                fix_hairline=True,
+                )
 
     if user_agent != UserAgent.DESKTOP:
         _set_platform(driver=driver, user_agent=user_agent)
         set_user_agent_data(driver=driver, user_agent=user_agent)
 
-    driver.delete_all_cookies()
-    driver.set_window_size(*window_size)
-    driver.set_window_position(*window_position)
+    # driver.delete_all_cookies()
+    # driver.set_window_size(*window_size)
+    # driver.set_window_position(*window_position)
 
     return driver
 
@@ -132,15 +148,22 @@ if __name__ == "__main__":
     proxyConfig = ProxyConfig(
         host="proxy.packetstream.io",
         port=31112, scheme="http",
-        locations=["Germany", "United States"],
+        locations=["germany", "united-states"],
         username="carlalmedia",
         password="lIeEidXf3StEc0ll",
         provider="Packetstream"
     )
+    d = create_driver(
+        user_agent=UserAgent.DESKTOP,
+        proxy_country="united-states",
+        proxy_config=proxyConfig,
+        headless=False,
+        window_size=(1300, 800),
+        window_position=(50, 50),
+        enable_stealth=False,
+        user_data_dir="cointiply"
+    )
 
-    d = create_driver(user_agent=UserAgent.DESKTOP, proxy_country="Germany", proxy_config=proxyConfig,
-                      headless=False,
-                      window_size=(1300, 800), window_position=(50, 50))
-    d.get(url="https://www.google.com")
+    # d.get(url="https://proxy.incolumitas.com/proxy_detect.html")
     time.sleep(6000)
     d.quit()

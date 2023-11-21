@@ -7,7 +7,7 @@ from selenium_scraper.proxy.config import ProxyConfig
 proxy_config = ProxyConfig(
     host="localhost",
     port=80, scheme="http",
-    locations=["Germany", "United States"],
+    locations=["germany", "united-states"],
     username="Username",
     password="Password",
     provider="Packetstream"
@@ -16,7 +16,7 @@ proxy_config = ProxyConfig(
 
 class ProxyTest(unittest.TestCase):
     def test_create_proxy(self):
-        proxy_path = proxy_manager.get_proxy_path(country="United States", config=proxy_config)
+        proxy_path = proxy_manager.get_proxy_path(country="united-states", config=proxy_config)
         self.assertTrue(os.path.isfile(proxy_path))
 
     def test_invalid_country(self):

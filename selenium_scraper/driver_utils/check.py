@@ -2,11 +2,12 @@ import time
 
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver import Chrome
+from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
+
 from selenium_scraper.driver_utils import wait
-from selenium.webdriver.common.alert import Alert
 
 
 def if_exists(driver: Chrome, locator: tuple, timeout: float) -> WebElement | None:
