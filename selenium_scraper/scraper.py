@@ -16,7 +16,7 @@ class Scraper(Agent):
             user_agent: UserAgent,
             proxy_country: str | None,
             proxy_config: ProxyConfig | None,
-            credentials: Credentials,
+            credentials: Credentials | None,
             headless: bool,
             max_retries: int,
             window_size: tuple[int, int],
@@ -24,7 +24,7 @@ class Scraper(Agent):
             verbose: bool,
             iterations: int,
             enable_stealth: bool,
-            user_data_dir: str
+            user_data_dir: str | None
     ) -> None:
         super().__init__(
             user_agent=user_agent,
@@ -114,7 +114,7 @@ if __name__ == "__main__":
         verbose=True,
         iterations=1,
         enable_stealth=False,
-        user_data_dir=user_data_dir
+        user_data_dir=None
     )
 
     scraper.start()

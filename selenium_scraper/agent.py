@@ -23,7 +23,7 @@ class Agent:
             window_size: tuple[int, int],
             window_position: tuple[int, int],
             enable_stealth: bool,
-            user_data_dir: str
+            user_data_dir: str | None
     ) -> None:
         self.user_agent = user_agent
         self.proxy_country = proxy_country
