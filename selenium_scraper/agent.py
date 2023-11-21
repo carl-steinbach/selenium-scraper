@@ -22,7 +22,8 @@ class Agent:
             headless: bool,
             window_size: tuple[int, int],
             window_position: tuple[int, int],
-            enable_stealth: bool
+            enable_stealth: bool,
+            user_data_dir: str
     ) -> None:
         self.user_agent = user_agent
         self.proxy_country = proxy_country
@@ -31,6 +32,7 @@ class Agent:
         self.window_size = window_size
         self.window_position = window_position
         self.enable_stealth = enable_stealth
+        self.user_data_dir = user_data_dir
 
         self.scroll_timeout = 30.0
         self.wait_timeout = 60.0
@@ -47,7 +49,8 @@ class Agent:
             headless=self.headless,
             window_size=self.window_size,
             window_position=self.window_position,
-            enable_stealth=self.enable_stealth
+            enable_stealth=self.enable_stealth,
+            user_data_dir=self.user_data_dir
         )
 
     # cleanup resources and stop the driver
