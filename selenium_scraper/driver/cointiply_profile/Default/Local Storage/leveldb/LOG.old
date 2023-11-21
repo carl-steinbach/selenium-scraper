@@ -1,5 +1,0 @@
-2023/11/21-12:39:42.072 5003 Creating DB /Users/carlsteinbach/Projects/selenium-scraper/selenium_scraper/driver/test_profile/Default/Local Storage/leveldb since it was missing.
-2023/11/21-12:39:42.198 5003 Reusing MANIFEST /Users/carlsteinbach/Projects/selenium-scraper/selenium_scraper/driver/test_profile/Default/Local Storage/leveldb/MANIFEST-000001
-2023/11/21-12:41:03.329 2e03 Level-0 table #5: started
-2023/11/21-12:41:03.351 2e03 Level-0 table #5: 44479 bytes OK
-2023/11/21-12:41:03.387 2e03 Delete type=0 #3
