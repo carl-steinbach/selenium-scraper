@@ -37,7 +37,9 @@ def create_driver(
     options.set_capability("goog:loggingPrefs", {'performance': 'ALL'})
 
     if user_data_dir:
-        options.add_argument(f"--user-data-dir={user_data_dir}")
+        path_to_user_data_dir = pathlib.Path(__file__).parent.resolve().joinpath("profiles")
+        path_to_user_data_dir = path_to_user_data_dir.joinpath(user_data_dir).as_posix()
+        options.add_argument(f"--user-data-dir={path_to_user_data_dir}")
 
     # add proxy
     if proxy_country and proxy_config:
@@ -151,7 +153,6 @@ if __name__ == "__main__":
         password="lIeEidXf3StEc0ll",
         provider="Packetstream"
     )
-    test_user_data_dir = pathlib.Path(__file__).parent.resolve().joinpath("cointiply_profile").as_posix()
     d = create_driver(
         user_agent=UserAgent.DESKTOP,
         proxy_country="united-states",
@@ -160,7 +161,7 @@ if __name__ == "__main__":
         window_size=(1300, 800),
         window_position=(50, 50),
         enable_stealth=False,
-        user_data_dir=test_user_data_dir
+        user_data_dir="cointiply"
     )
 
     # d.get(url="https://proxy.incolumitas.com/proxy_detect.html")
