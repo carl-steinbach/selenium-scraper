@@ -21,7 +21,8 @@ class Agent:
             proxy_config: ProxyConfig | None,
             headless: bool,
             window_size: tuple[int, int],
-            window_position: tuple[int, int]
+            window_position: tuple[int, int],
+            enable_stealth: bool
     ) -> None:
         self.user_agent = user_agent
         self.proxy_country = proxy_country
@@ -29,6 +30,7 @@ class Agent:
         self.headless = headless
         self.window_size = window_size
         self.window_position = window_position
+        self.enable_stealth = enable_stealth
 
         self.scroll_timeout = 30.0
         self.wait_timeout = 60.0
@@ -44,7 +46,8 @@ class Agent:
             proxy_config=self.proxy_config,
             headless=self.headless,
             window_size=self.window_size,
-            window_position=self.window_position
+            window_position=self.window_position,
+            enable_stealth=self.enable_stealth
         )
 
     # cleanup resources and stop the driver

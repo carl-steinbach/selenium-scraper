@@ -79,4 +79,4 @@ def create_zip(country: str, config: ProxyConfig, proxy_dir: str):
         extension_zip.write(manifest_path, "manifest.json", compress_type=zip_mode)
         extension_zip.write(background_path, "background.js", compress_type=zip_mode)
 
-    return proxy_zip_path
+    return formatted_country

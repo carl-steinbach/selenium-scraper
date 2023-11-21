@@ -1,6 +1,8 @@
 """A specialized agent used to structure web scraping"""
+import time
 import traceback
 
+import selenium_scraper.user_agent
 from selenium_scraper.agent import Agent
 from selenium_scraper.credentials import Credentials
 from selenium_scraper.proxy.config import ProxyConfig
@@ -20,7 +22,8 @@ class Scraper(Agent):
             window_size: tuple[int, int],
             window_position: tuple[int, int],
             verbose: bool,
-            iterations: int
+            iterations: int,
+            enable_stealth: bool,
     ) -> None:
         super().__init__(
             user_agent=user_agent,
@@ -28,7 +31,8 @@ class Scraper(Agent):
             proxy_config=proxy_config,
             headless=headless,
             window_position=window_position,
-            window_size=window_size
+            window_size=window_size,
+            enable_stealth=enable_stealth,
         )
         self.name = name
         self.credentials = credentials
@@ -92,3 +96,24 @@ class Scraper(Agent):
     def info(self, msg):
         if self.verbose:
             self.log(msg)
+
+
+if __name__ == "__main__":
+    scraper = Scraper(
+        name="test",
+        user_agent=selenium_scraper.user_agent.UserAgent.DESKTOP,
+        proxy_config=None,
+        proxy_country=None,
+        credentials=None,
+        headless=False,
+        max_retries=3,
+        window_size=(1300, 800),
+        window_position=(50, 50),
+        verbose=True,
+        iterations=1,
+        enable_stealth=False
+    )
+
+    scraper.start()
+    scraper.driver.get("https://dollah.co")
+    time.sleep(60000)
