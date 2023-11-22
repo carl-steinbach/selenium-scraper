@@ -23,14 +23,14 @@ def create_driver(
 ) -> selenium.webdriver.Chrome:
 
     # options
-    # prefs = {"credentials_enable_service": False,
-    #          "profile.password_manager_enabled": False}
-    # options = selenium.webdriver.ChromeOptions()
-    options = undetected_chromedriver.options.ChromeOptions()
-    # options.add_experimental_option("prefs", prefs)
-    # options.add_experimental_option("excludeSwitches", ['enable-automation'])
-    # options.add_argument('--disable-blink-features=AutomationControlled')
-    # options.add_experimental_option('useAutomationExtension', False)
+    prefs = {"credentials_enable_service": False,
+             "profile.password_manager_enabled": False}
+    options = selenium.webdriver.ChromeOptions()
+    # options = undetected_chromedriver.options.ChromeOptions()
+    options.add_experimental_option("prefs", prefs)
+    options.add_experimental_option("excludeSwitches", ['enable-automation'])
+    options.add_argument('--disable-blink-features=AutomationControlled')
+    options.add_experimental_option('useAutomationExtension', False)
     options.add_argument("--disable-plugins-discovery")
     options.add_argument("--start-maximized")
     options.add_argument("--enable-logging --v=1")
@@ -68,8 +68,8 @@ def create_driver(
             # options.add_argument("--window-size=1920,1080")
             pass
 
-    # driver = selenium.webdriver.Chrome(options=options)  # desired_capabilities=capabilities)
-    driver = undetected_chromedriver.Chrome(options=options)
+    driver = selenium.webdriver.Chrome(options=options)  # desired_capabilities=capabilities)
+    # driver = undetected_chromedriver.Chrome(options=options)
     if enable_stealth:
         stealth(driver,
                 languages=["en-US", "en"],
