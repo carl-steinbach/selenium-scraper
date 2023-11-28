@@ -9,6 +9,7 @@ from selenium_scraper.driver import chrome
 from selenium_scraper.driver_utils import wait, find, check, parse, scroll, utils
 from selenium_scraper.proxy.config import ProxyConfig
 from selenium_scraper.user_agent import UserAgent
+from selenium_scraper.window import Window
 
 save_url = """old_wop = window.open; function new_wop(url) { document.g_url = url }; window.open = new_wop"""
 
@@ -20,8 +21,7 @@ class Agent:
             proxy_country: str | None,
             proxy_config: ProxyConfig | None,
             headless: bool,
-            window_size: tuple[int, int],
-            window_position: tuple[int, int],
+            window: Window,
             enable_stealth: bool,
             user_data_dir: str | None
     ) -> None:
@@ -29,8 +29,7 @@ class Agent:
         self.proxy_country = proxy_country
         self.proxy_config = proxy_config
         self.headless = headless
-        self.window_size = window_size
-        self.window_position = window_position
+        self.window = window
         self.enable_stealth = enable_stealth
         self.user_data_dir = user_data_dir
 
@@ -47,8 +46,7 @@ class Agent:
             proxy_country=self.proxy_country,
             proxy_config=self.proxy_config,
             headless=self.headless,
-            window_size=self.window_size,
-            window_position=self.window_position,
+            window=self.window,
             enable_stealth=self.enable_stealth,
             user_data_dir=self.user_data_dir
         )
@@ -88,7 +86,7 @@ class Agent:
         return wait.until_invisible(driver=self.driver, element=element, timeout=self.wait_timeout, msg=msg)
 
     def scroll_into_view(self, body: WebElement, element: WebElement):
-        return scroll.into_view(driver=self.driver, body=body, element=element, window_height=self.window_size[1])
+        return scroll.into_view(driver=self.driver, body=body, element=element, window_height=self.window.height)
 
     def scroll_until_loaded(self, body: WebElement, locator: tuple, msg: str = ""):
         return scroll.until_loaded(driver=self.driver, body=body, locator=locator, timeout=self.scroll_timeout, msg=msg)

@@ -7,6 +7,7 @@ from selenium_scraper.agent import Agent
 from selenium_scraper.credentials import Credentials
 from selenium_scraper.proxy.config import ProxyConfig
 from selenium_scraper.user_agent import UserAgent
+from selenium_scraper.window import Window
 
 
 class Scraper(Agent):
@@ -19,8 +20,7 @@ class Scraper(Agent):
             credentials: Credentials | None,
             headless: bool,
             max_retries: int,
-            window_size: tuple[int, int],
-            window_position: tuple[int, int],
+            window: Window,
             verbose: bool,
             iterations: int,
             enable_stealth: bool,
@@ -31,8 +31,7 @@ class Scraper(Agent):
             proxy_country=proxy_country,
             proxy_config=proxy_config,
             headless=headless,
-            window_position=window_position,
-            window_size=window_size,
+            window=window,
             enable_stealth=enable_stealth,
             user_data_dir=user_data_dir
         )
@@ -109,8 +108,7 @@ if __name__ == "__main__":
         credentials=None,
         headless=False,
         max_retries=3,
-        window_size=(1300, 800),
-        window_position=(50, 50),
+        window=Window(height=1800, width=1000, x=50, y=50),
         verbose=True,
         iterations=1,
         enable_stealth=False,

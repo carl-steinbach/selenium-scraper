@@ -159,8 +159,7 @@ if __name__ == "__main__":
         proxy_country="united-states",
         proxy_config=proxyConfig,
         headless=False,
-        window_size=(1300, 800),
-        window_position=(50, 50),
+        window=None,
         enable_stealth=False,
         user_data_dir="cointiply"
     )
