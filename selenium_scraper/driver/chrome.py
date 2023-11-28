@@ -2,12 +2,12 @@ import pathlib
 import time
 
 import selenium.webdriver
-import undetected_chromedriver
 from selenium_stealth import stealth
 
 from selenium_scraper.proxy import manager
 from selenium_scraper.proxy.config import ProxyConfig
 from selenium_scraper.user_agent import UserAgent
+from selenium_scraper.window import Window
 
 ios_str = ("userAgent=Mozilla/5.0  (iPhone; CPU iPhone OS 12_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, "
            "like  Gecko) CriOS/101.0.4951.44 Mobile/15E148 Safari/604.1")
@@ -19,7 +19,7 @@ android_str_1 = ("Mozilla/5.0 (Linux; U; Android 4.0.3; de-ch; HTC Sensation Bui
 
 def create_driver(
         user_agent: UserAgent, proxy_country: str | None, proxy_config: ProxyConfig | None, headless: bool,
-        window_size: tuple, window_position: tuple[int, int], enable_stealth: bool, user_data_dir: str | None
+        window: Window | None, enable_stealth: bool, user_data_dir: str | None
 ) -> selenium.webdriver.Chrome:
 
     # options
@@ -71,22 +71,23 @@ def create_driver(
     driver = selenium.webdriver.Chrome(options=options)  # desired_capabilities=capabilities)
     # driver = undetected_chromedriver.Chrome(options=options)
     if enable_stealth:
-        stealth(driver,
-                languages=["en-US", "en"],
-                vendor="Google Inc.",
-                platform=_get_platform(user_agent),
-                webgl_vendor="Intel Inc.",
-                renderer="Intel Iris OpenGL Engine",
-                fix_hairline=True,
-                )
+        stealth(
+            driver,
+            languages=["en-US", "en"],
+            vendor="Google Inc.",
+            platform=_get_platform(user_agent),
+            webgl_vendor="Intel Inc.",
+            renderer="Intel Iris OpenGL Engine",
+            fix_hairline=True,
+        )
 
     if user_agent != UserAgent.DESKTOP:
         _set_platform(driver=driver, user_agent=user_agent)
         set_user_agent_data(driver=driver, user_agent=user_agent)
 
-    # driver.delete_all_cookies()
-    # driver.set_window_size(*window_size)
-    # driver.set_window_position(*window_position)
+    if window:
+        driver.set_window_size(*window.size)
+        driver.set_window_position(*window.position)
 
     return driver
 
@@ -158,8 +159,7 @@ if __name__ == "__main__":
         proxy_country="united-states",
         proxy_config=proxyConfig,
         headless=False,
-        window_size=(1300, 800),
-        window_position=(50, 50),
+        window=None,
         enable_stealth=False,
         user_data_dir="cointiply"
     )
