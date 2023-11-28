@@ -86,8 +86,8 @@ def create_driver(
         set_user_agent_data(driver=driver, user_agent=user_agent)
 
     if window:
-        driver.set_window_size(**window.size)
-        driver.set_window_position(**window.position)
+        driver.set_window_size(*window.size)
+        driver.set_window_position(*window.position)
 
     return driver
 
