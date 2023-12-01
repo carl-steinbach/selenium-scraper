@@ -21,7 +21,7 @@ class Agent:
             proxy_country: str | None,
             proxy_config: ProxyConfig | None,
             headless: bool,
-            window: Window,
+            window: Window | None,
             enable_stealth: bool,
             user_data_dir: str | None
     ) -> None:

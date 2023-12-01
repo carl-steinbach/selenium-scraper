@@ -20,7 +20,7 @@ class Scraper(Agent):
             credentials: Credentials | None,
             headless: bool,
             max_retries: int,
-            window: Window,
+            window: Window | None,
             verbose: bool,
             iterations: int,
             enable_stealth: bool,
