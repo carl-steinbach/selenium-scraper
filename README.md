@@ -8,6 +8,6 @@ adding a proxy. The `selenium-stealth` package can optionally be used to further
 
 Author:  Carl Steinbach
 
-Version: 1.0
+Version: 1.1
 
 ---
