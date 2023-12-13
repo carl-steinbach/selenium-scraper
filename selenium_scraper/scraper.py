@@ -24,7 +24,8 @@ class Scraper(Agent):
             verbose: bool,
             iterations: int,
             enable_stealth: bool,
-            user_data_dir: str | None
+            user_data_dir: str | None,
+            low_data: bool
     ) -> None:
         super().__init__(
             user_agent=user_agent,
@@ -33,7 +34,8 @@ class Scraper(Agent):
             headless=headless,
             window=window,
             enable_stealth=enable_stealth,
-            user_data_dir=user_data_dir
+            user_data_dir=user_data_dir,
+            low_data=low_data
         )
         self.name = name
         self.credentials = credentials
