@@ -18,13 +18,23 @@ android_str_1 = ("Mozilla/5.0 (Linux; U; Android 4.0.3; de-ch; HTC Sensation Bui
 
 
 def create_driver(
-        user_agent: UserAgent, proxy_country: str | None, proxy_config: ProxyConfig | None, headless: bool,
-        window: Window | None, enable_stealth: bool, user_data_dir: str | None
+        user_agent: UserAgent,
+        proxy_country: str | None,
+        proxy_config: ProxyConfig | None,
+        headless: bool,
+        window: Window | None,
+        enable_stealth: bool,
+        user_data_dir: str | None,
+        low_data: bool
 ) -> selenium.webdriver.Chrome:
 
-    # options
+    # preferences
     prefs = {"credentials_enable_service": False,
              "profile.password_manager_enabled": False}
+    if low_data:
+        prefs["profile.managed_default_content_settings.images"] = 2
+
+    # options
     options = selenium.webdriver.ChromeOptions()
     # options = undetected_chromedriver.options.ChromeOptions()
     options.add_experimental_option("prefs", prefs)
@@ -159,9 +169,11 @@ if __name__ == "__main__":
         headless=False,
         window=None,
         enable_stealth=False,
-        user_data_dir=pathlib.Path(__file__).parent.resolve().joinpath("profiles", "cointiply").as_posix()
+        user_data_dir=pathlib.Path(__file__).parent.resolve().joinpath("profiles", "cointiply").as_posix(),
+        low_data=True
     )
 
     # d.get(url="https://proxy.incolumitas.com/proxy_detect.html")
+    d.get(url="https://google.com")
     time.sleep(6000)
     d.quit()

@@ -23,7 +23,8 @@ class Agent:
             headless: bool,
             window: Window | None,
             enable_stealth: bool,
-            user_data_dir: str | None
+            user_data_dir: str | None,
+            low_data: bool
     ) -> None:
         self.user_agent = user_agent
         self.proxy_country = proxy_country
@@ -38,6 +39,7 @@ class Agent:
         self.check_timeout = 1.0
         self.redirect_timeout = 3.0
         self.driver: Chrome | None = None
+        self.low_data: bool = low_data
 
     # start the driver
     def start(self):
@@ -48,7 +50,8 @@ class Agent:
             headless=self.headless,
             window=self.window,
             enable_stealth=self.enable_stealth,
-            user_data_dir=self.user_data_dir
+            user_data_dir=self.user_data_dir,
+            low_data=self.low_data
         )
 
     # cleanup resources and stop the driver
