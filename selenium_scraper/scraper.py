@@ -61,8 +61,7 @@ if __name__ == "__main__":
     )
     try:
         scraper.start()
-        scraper.driver.get(
-            "www.google.com")
+        scraper.driver.get("https://google.com")
         time.sleep(5)
         scraper.driver.save_screenshot("screenshot.png")
     finally:
