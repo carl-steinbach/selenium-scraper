@@ -4,6 +4,12 @@ A wrapper for the Selenium web driver to facilitate web scraping. Hides some aut
 adding a proxy. The `selenium-stealth` package can optionally be used to further obfuscate the driver using the
 `enable_stealth` param.
 
+## Installation
+
+Install via pip using `pip install git+https://{$token}@github.com/carl-steinbach/selenium-scraper.git`
+
+Example instantiation of the Scraper class can be seen in the `selenium_scraper.scraper.Scraper.py` module.
+
 ## Startup
 
 Start an instance of the driver by instantiating the `selenium_scraper.scraper.Scraper` class.
