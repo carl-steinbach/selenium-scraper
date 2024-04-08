@@ -43,26 +43,3 @@ class Scraper(Agent):
     def info(self, msg):
         if self.verbose:
             self.log(msg)
-
-
-if __name__ == "__main__":
-    scraper = Scraper(
-        name="test",
-        user_agent=selenium_scraper.user_agent.UserAgent.DESKTOP,
-        proxy_config=None,
-        proxy_country=None,
-        headless=True,
-        verbose=True,
-        dry_run=True,
-        window=None,
-        enable_stealth=True,
-        user_data_dir=None,
-        low_data=False
-    )
-    try:
-        scraper.start()
-        scraper.driver.get("https://google.com")
-        time.sleep(5)
-        scraper.driver.save_screenshot("screenshot.png")
-    finally:
-        scraper.quit()

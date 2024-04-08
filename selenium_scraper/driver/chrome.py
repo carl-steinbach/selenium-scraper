@@ -1,7 +1,6 @@
 import pathlib
 
 import selenium.webdriver
-import undetected_chromedriver
 from selenium_stealth import stealth
 
 from selenium_scraper.proxy import manager
@@ -36,7 +35,8 @@ def create_driver(
 
     # options
     if use_undetected_chromedriver:
-        options = undetected_chromedriver.options.ChromeOptions()
+        # options = undetected_chromedriver.options.ChromeOptions()
+        raise Exception("undetected chromedriver is no longer supported")
     else:
         options = selenium.webdriver.ChromeOptions()
         options.add_experimental_option("excludeSwitches", ['enable-automation'])
@@ -80,7 +80,8 @@ def create_driver(
             pass
 
     if use_undetected_chromedriver:
-        driver = undetected_chromedriver.Chrome(headless=headless, options=options)
+        # driver = undetected_chromedriver.Chrome(headless=headless, options=options)
+        raise Exception("undetected-chromedriver is no longer supported")
     else:
         driver = selenium.webdriver.Chrome(options=options)  # desired_capabilities=capabilities)
     if enable_stealth:
