@@ -18,6 +18,8 @@ Start an instance of the driver by instantiating the `selenium_scraper.scraper.S
 Calling the `start()` method of the scraper will start a chromedriver instance, the `driver` parameter can be used to
 directly access the chromedriver.
 
+In order to use a proxy, add your credentials to the ProxyConfig object and pass it to the scraper constructor.
+
 ```
 import selenium_scraper.proxy.config
 import selenium_scraper.scraper

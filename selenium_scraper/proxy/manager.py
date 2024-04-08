@@ -8,13 +8,14 @@ available_providers = ["packetstream"]
 
 
 # create the proxy extension and return the path
-def get_proxy_path(country: str, config: ProxyConfig) -> str:
+def create_proxy_extension(country: str, config: ProxyConfig) -> str:
+    """returns the path to the proxy directory relative to the extensions directory"""
     if not os.path.isdir(proxy_dir):
         os.mkdir(proxy_dir)
 
     if country not in config.locations or country is None or country == "":
         raise ValueError(
-            f"proxy is unavailable in this country; got {country}")
+            f"proxy is unavailable in this country, got {country}")
 
     match str(config.provider).lower():
         case "packetstream":

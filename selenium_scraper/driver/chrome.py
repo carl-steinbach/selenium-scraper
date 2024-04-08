@@ -56,7 +56,7 @@ def create_driver(
     if proxy_country and proxy_config:
         # options.add_extension(manager.get_proxy_path(country=proxy_country, config=proxy_config))
         proxy_path = pathlib.Path(__file__).parent.parent.resolve().joinpath("proxy", "extensions")
-        proxy_path = proxy_path.joinpath(manager.get_proxy_path(country=proxy_country, config=proxy_config))
+        proxy_path = proxy_path.joinpath(manager.create_proxy_extension(country=proxy_country, config=proxy_config))
         options.add_argument(f"--load-extension={proxy_path.as_posix()}")
 
     # headless mode
