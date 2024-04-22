@@ -49,14 +49,14 @@ class Agent:
         self.wait_timeout = wait_timeout
         self.check_timeout = check_timeout
         self.redirect_timeout = redirect_timeout
-        self.driver: WebDriver | None = None
+        self.driver = None
         self.browser = browser
 
     # start the driver
     def start(self):
         """start a selenium webdriver using seleniumbase, if you want more control, override this method and call the
         seleniumbase.Driver() method yourself."""
-        self.driver: WebDriver = seleniumbase.Driver(
+        self.driver = seleniumbase.Driver(
             browser=self.browser,
             proxy=self.proxy,
             headless=self.headless,
