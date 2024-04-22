@@ -49,7 +49,7 @@ class Agent:
         self.wait_timeout = wait_timeout
         self.check_timeout = check_timeout
         self.redirect_timeout = redirect_timeout
-        self.driver = None
+        self.driver: WebDriver | None = None
         self.browser = browser
 
     # start the driver
