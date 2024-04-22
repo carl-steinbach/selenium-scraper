@@ -31,6 +31,7 @@ class Agent:
         Create a new Agent
 
         :param str proxy: Set a proxy in the following format, 'USER:PASS@SERVER:PORT' or set to None to disable
+        NOTE: some proxies might not work in https mode and only work with http instead
         :param bool headless: Activate headless mode
         :param bool undetected: Enable the undected version of the seleniumbase driver
         :param str user_data_dir: Path to the user data directory, set to None to not use one
