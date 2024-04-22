@@ -2,58 +2,69 @@
 import json
 import time
 
-from selenium.webdriver import Chrome
+import seleniumbase
+from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 
-from selenium_scraper.driver import chrome
-from selenium_scraper.driver_utils import wait, find, check, parse, scroll, utils
-from selenium_scraper.proxy.config import ProxyConfig
-from selenium_scraper.user_agent import UserAgent
-from selenium_scraper.window import Window
+from selenium_scraper.driver_utils import check, find, parse, scroll, utils, wait
 
 save_url = """old_wop = window.open; function new_wop(url) { document.g_url = url }; window.open = new_wop"""
 
 
 class Agent:
+    """Agent managing a Selenium WebDriver, provides utility methods for locating elements. Uses a seleniumbase
+    driver internally.
+    """
     def __init__(
             self,
-            user_agent: UserAgent,
-            proxy_country: str | None,
-            proxy_config: ProxyConfig | None,
+            proxy: str | None,  # USER:PASS@SERVER:PORT
             headless: bool,
-            window: Window | None,
-            enable_stealth: bool,
-            user_data_dir: str | None,
-            low_data: bool
+            undetected: bool,
+            user_data_dir: str,
+            browser: str = "chrome",
+            scroll_timeout: float = 30.0,
+            wait_timeout: float = 60.0,
+            redirect_timeout: float = 3.0,
+            check_timeout: float = 1.0,
     ) -> None:
-        self.user_agent = user_agent
-        self.proxy_country = proxy_country
-        self.proxy_config = proxy_config
+        """
+        Create a new Agent
+
+        :param str proxy: Set a proxy in the following format, 'USER:PASS@SERVER:PORT' or set to None to disable
+        :param bool headless: Activate headless mode
+        :param bool undetected: Enable the undected version of the seleniumbase driver
+        :param str user_data_dir: Path to the user data directory, set to None to not use one
+        :param str browser: Which browser to use ("chrome", "safari", etc.), must be installed on your device.
+        :param float scroll_timeout: The timeout used to wait in scroll-utility methods
+        :param float wait_timeout: Timeout used to wait utility methods (e.g. wait_until_exists(), ... )
+        :param float redirect_timeout: Timeout used to wait for a redirect link to load
+        :param check_timeout: Timeout used in check-related utiliy methods (e.g. check_if_exists(), ... )
+        """
+        self.proxy = proxy
+        self.undetected = undetected
         self.headless = headless
-        self.window = window
-        self.enable_stealth = enable_stealth
         self.user_data_dir = user_data_dir
 
-        self.scroll_timeout = 30.0
-        self.wait_timeout = 60.0
-        self.check_timeout = 1.0
-        self.redirect_timeout = 3.0
-        self.driver: Chrome | None = None
-        self.low_data: bool = low_data
+        self.scroll_timeout = scroll_timeout
+        self.wait_timeout = wait_timeout
+        self.check_timeout = check_timeout
+        self.redirect_timeout = redirect_timeout
+        self.driver: WebDriver | None = None
+        self.browser = browser
 
     # start the driver
     def start(self):
-        self.driver = chrome.create_driver(
-            user_agent=self.user_agent,
-            proxy_country=self.proxy_country,
-            proxy_config=self.proxy_config,
+        """start a selenium webdriver using seleniumbase, if you want more control, override this method and call the
+        seleniumbase.Driver() method yourself."""
+        self.driver: WebDriver = seleniumbase.Driver(
+            browser=self.browser,
+            proxy=self.proxy,
             headless=self.headless,
-            window=self.window,
-            enable_stealth=self.enable_stealth,
-            user_data_dir=self.user_data_dir,
-            low_data=self.low_data,
-            use_undetected_chromedriver=False
+            undetected=self.undetected,
+            undetectable=self.undetected,
+            user_data_dir=self.user_data_dir
         )
+        self.driver.start_client()
 
     # cleanup resources and stop the driver
     def quit(self):
@@ -90,7 +101,8 @@ class Agent:
         return wait.until_invisible(driver=self.driver, element=element, timeout=self.wait_timeout, msg=msg)
 
     def scroll_into_view(self, body: WebElement, element: WebElement):
-        return scroll.into_view(driver=self.driver, body=body, element=element, window_height=self.window.height)
+        return scroll.into_view(driver=self.driver, body=body, element=element,
+                                window_height=self.driver.get_window_size()["height"])
 
     def scroll_until_loaded(self, body: WebElement, locator: tuple, msg: str = ""):
         return scroll.until_loaded(driver=self.driver, body=body, locator=locator, timeout=self.scroll_timeout, msg=msg)
