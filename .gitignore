@@ -12,3 +12,4 @@ selenium_scraper/proxy/extensions
 selenium_scraper/driver/profiles
 *.egg-info
 downloaded_files
+scripts
