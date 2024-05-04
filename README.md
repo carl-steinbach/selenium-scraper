@@ -1,8 +1,7 @@
 # Selenium Web Scraper
 
-A wrapper for the Selenium web driver to facilitate web scraping. Hides some automation headers and provides support for
-adding a proxy. The `selenium-stealth` package can optionally be used to further obfuscate the driver using the
-`enable_stealth` param.
+This package provides a wrapper for the [Selenium Web Driver](https://www.selenium.dev) to facilitate web scraping. Adds various utiliy methods to access elements on the 
+page, capture redirects and navigate pages. Uses the [SeleniumBase](https://seleniumbase.io) package to create the driver.
 
 ## Installation
 
@@ -14,43 +13,27 @@ Example instantiation of the Scraper class can be seen in the `selenium_scraper.
 
 ## Getting started
 
-Start an instance of the driver by instantiating the `selenium_scraper.scraper.Scraper` class.
-Calling the `start()` method of the scraper will start a chromedriver instance, the `driver` parameter can be used to
-directly access the chromedriver.
+Create a scraper by instantiating the `selenium_scraper.scraper.Scraper` class.
+Calling the `start()` method of the scraper will start a chromedriver instance, the `driver` attribute can be used to
+directly access the chromedriver. Ensure to call the scrapers `quit` method after use.
 
-In order to use a proxy, add your credentials to the ProxyConfig object and pass it to the scraper constructor.
+In order to use a proxy, pass a proxy string formatted like so `"USER:PASS@SERVER:PORT"`.
 
 ```
 import selenium_scraper.proxy.config
 import selenium_scraper.scraper
 import selenium_scraper.user_agent
 
-proxy_config = selenium_scraper.proxy.config.ProxyConfig(
-    host="<PROXY_HOST>",
-    port="<PROXY_PORT>",
-    scheme="https",
-    locations=["United-States", "Germany"],  # these values are used to validate the `proxy_country` attribute
-    username="<USERNAME>",
-    password="<PASSWORD>",
-    provider="packetstream"  # only packet stream is implemented right now
-)
-
 if __name__ == "__main__":
     scraper = selenium_scraper.scraper.Scraper(
         name="test",
-        user_agent=selenium_scraper.user_agent.UserAgent.DESKTOP,
-        proxy_config=None,
-        proxy_country="United-States",
+        proxy=None, # proxy format "USER:PASS@SERVER:PORT"
         headless=True,
-        verbose=True,
-        dry_run=True,
-        window=None,
-        enable_stealth=True,
-        user_data_dir=None,
-        low_data=False
+        undetected=False
+        user_data_dir=None
     )
     try:
-        scraper.start()
+        scraper.start(devtools=True) # pass additional keyword arguments to the seleniumbase Driver constructor here
         scraper.driver.get("https://google.com")
         scraper.driver.save_screenshot("getting_started_screenshot.png")
     finally:
@@ -63,6 +46,6 @@ if __name__ == "__main__":
 
 Author:  Carl Steinbach
 
-Version: 1.4
+Version: 1.6
 
 ---

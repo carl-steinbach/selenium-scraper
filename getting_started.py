@@ -10,10 +10,10 @@ if __name__ == "__main__":
         headless=False,
         user_data_dir=None
     )
-    scraper.start()
+    scraper.start(devtools=True)
     try:
         scraper.driver.get("https://google.com")
-        time.sleep(10)
         scraper.driver.save_screenshot("getting_started_screenshot.png")
+        input("press any key to exit")
     finally:
         scraper.quit()

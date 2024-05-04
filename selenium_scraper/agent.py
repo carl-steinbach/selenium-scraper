@@ -54,16 +54,17 @@ class Agent:
         self.browser = browser
 
     # start the driver
-    def start(self):
+    def start(self, **kwargs):
         """start a selenium webdriver using seleniumbase, if you want more control, override this method and call the
-        seleniumbase.Driver() method yourself."""
+        seleniumbase.Driver() method yourself, or pass in additonal keyword args."""
         self.driver = seleniumbase.Driver(
             browser=self.browser,
             proxy=self.proxy,
             headless=self.headless,
             undetected=self.undetected,
             undetectable=self.undetected,
-            user_data_dir=self.user_data_dir
+            user_data_dir=self.user_data_dir,
+            **kwargs
         )
         self.driver.start_client()
 
