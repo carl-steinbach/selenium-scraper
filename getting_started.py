@@ -1,34 +1,28 @@
-import selenium_scraper.proxy.config
 import selenium_scraper.scraper
-import selenium_scraper.user_agent
+import sbvirtualdisplay
 
-proxy_config = selenium_scraper.proxy.config.ProxyConfig(
-    host="<PROXY_HOST>",
-    port="<PROXY_PORT>",
-    scheme="https",
-    locations=["United-States", "Germany"],  # these values are used to validate the `proxy_country` attribute
-    username="<USERNAME>",
-    password="<PASSWORD>",
-    provider="packetstream"  # only packet stream is implemented right now
-)
+USE_VIRTUAL_DISPLAY = False
 
 if __name__ == "__main__":
+    if USE_VIRTUAL_DISPLAY:
+        # if you want to use a virtual display, configure it like so:
+        display = sbvirtualdisplay.Display(visible=True, size=(1440, 1880))
+    else:
+        display = None
+
+
     scraper = selenium_scraper.scraper.Scraper(
         name="test",
-        user_agent=selenium_scraper.user_agent.UserAgent.DESKTOP,
-        proxy_config=None,
-        proxy_country=None,
-        headless=True,
-        verbose=True,
-        dry_run=True,
-        window=None,
-        enable_stealth=True,
-        user_data_dir=None,
-        low_data=False
+        proxy=None,  # "USER:PASS@SERVER:PORT"
+        undetected=False,
+        headless=False,
+        virtual_display=display,
+        user_data_dir=None
     )
+    scraper.start(devtools=True)
     try:
-        scraper.start()
-        scraper.driver.get("https://google.com")
+        scraper.driver.get("https://ipinfo.io")
         scraper.driver.save_screenshot("getting_started_screenshot.png")
+        input("press any key to exit")
     finally:
         scraper.quit()

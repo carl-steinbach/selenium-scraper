@@ -1,13 +1,12 @@
 **.DS_Store
 __pycache__
 .idea
-config.json
 build
 .vscode
 **.log
 venv
 **.png
 selenium_scraper/screenshots
-selenium_scraper/proxy/extensions
-selenium_scraper/driver/profiles
 *.egg-info
+downloaded_files
+scripts
