@@ -1,7 +1,9 @@
 """A wrapper class for the selenium webdriver, allows creating and managing a driver with the desired parameters"""
 import json
+import logging
 import time
 
+import sbvirtualdisplay.display
 import seleniumbase
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
@@ -10,22 +12,26 @@ from selenium_scraper.driver_utils import check, find, parse, scroll, utils, wai
 
 save_url = """old_wop = window.open; function new_wop(url) { document.g_url = url }; window.open = new_wop"""
 
+logger = logging.getLogger(__name__)
+
 
 class Agent:
     """Agent managing a Selenium WebDriver, provides utility methods for locating elements. Uses a seleniumbase
     driver internally.
     """
+
     def __init__(
             self,
             proxy: str | None,  # USER:PASS@SERVER:PORT
             headless: bool,
             undetected: bool,
             user_data_dir: str,
-            browser: str = "chrome",
+            virtual_display: sbvirtualdisplay.Display | None,
+            browser: str,
             scroll_timeout: float = 30.0,
             wait_timeout: float = 60.0,
             redirect_timeout: float = 3.0,
-            check_timeout: float = 1.0,
+            check_timeout: float = 1.0
     ) -> None:
         """
         Create a new Agent
@@ -35,6 +41,7 @@ class Agent:
         :param bool headless: Activate headless mode
         :param bool undetected: Enable the undected version of the seleniumbase driver
         :param str user_data_dir: Path to the user data directory, set to None to not use one
+        :param str virtual_display: Optionally use a virtual display, will be started and stopped with the driver.
         :param str browser: Which browser to use ("chrome", "safari", etc.), must be installed on your device.
         :param float scroll_timeout: The timeout used to wait in scroll-utility methods
         :param float wait_timeout: Timeout used to wait utility methods (e.g. wait_until_exists(), ... )
@@ -45,13 +52,13 @@ class Agent:
         self.undetected = undetected
         self.headless = headless
         self.user_data_dir = user_data_dir
-
         self.scroll_timeout = scroll_timeout
         self.wait_timeout = wait_timeout
         self.check_timeout = check_timeout
         self.redirect_timeout = redirect_timeout
         self.driver: WebDriver | None = None
         self.browser = browser
+        self.display = virtual_display
 
     # start the driver
     def start(self, **kwargs):
@@ -66,11 +73,23 @@ class Agent:
             user_data_dir=self.user_data_dir,
             **kwargs
         )
-        self.driver.start_client()
+        if self.display is not None:
+            self.display.start()
+        try:
+            self.driver.start_client()
+        except Exception or KeyboardInterrupt:
+            if self.display is not None:
+                self.display.stop()
+            raise
 
     # cleanup resources and stop the driver
     def quit(self):
-        self.driver.quit()
+        try:
+            if self.driver is not None:
+                self.driver.quit()
+        finally:
+            if self.display is not None:
+                self.display.stop()
 
     # wait until a condition is fulfilled
     def wait_until_exists(self, locator: tuple, parent: WebElement = None, msg: str = "",
@@ -153,9 +172,13 @@ class Agent:
         while True:
             time.sleep(self.redirect_timeout)
             new_requests = list(filter(self._valid_redirect, self.driver.get_log("performance")))
+            logger.debug(f"found {len(new_requests)} new requests")
+            for request in new_requests:
+                logger.debug(request)
             if len(new_requests) == 0:
                 alert = self.check_if_alert_exists()
                 if alert:
+                    logger.debug(f"accepting alert")
                     alert.accept()
                 else:
                     break

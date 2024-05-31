@@ -1,13 +1,17 @@
-import time
-
 import selenium_scraper.scraper
+import sbvirtualdisplay
 
 if __name__ == "__main__":
+    display = None
+    # if you want to use a virtual display, configure it like so:
+    # display = sbvirtualdisplay.Display(visible=True, size=(1440, 1880))
+
     scraper = selenium_scraper.scraper.Scraper(
         name="test",
         proxy=None,  # "USER:PASS@SERVER:PORT"
         undetected=False,
         headless=False,
+        virtual_display=display,
         user_data_dir=None
     )
     scraper.start(devtools=True)

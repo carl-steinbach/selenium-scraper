@@ -46,6 +46,6 @@ if __name__ == "__main__":
 
 Author:  Carl Steinbach
 
-Version: 1.6
+Version: 1.7
 
 ---
