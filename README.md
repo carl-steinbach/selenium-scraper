@@ -9,33 +9,45 @@ Install via pip using
 
 `pip install git+https://github.com/carl-steinbach/selenium-scraper.git`
 
-Example instantiation of the Scraper class can be seen in the `selenium_scraper.scraper.Scraper.py` module.
-
 ## Getting started
 
-Create a scraper by instantiating the `selenium_scraper.scraper.Scraper` class.
-Calling the `start()` method of the scraper will start a chromedriver instance, the `driver` attribute can be used to
-directly access the chromedriver. Ensure to call the scrapers `quit` method after use.
+Create a scraper by instantiating the `selenium_scraper.scraper.Scraper` class, and example instantiation can be viewed 
+in the `getting_started.py` module. 
+
+Calling `start()` on the scraper will start a chromedriver instance, the `driver` attribute can be used to
+directly access the chromedriver. Ensure to call `quit()` after use, this will also close associated virtual 
+displays.
 
 In order to use a proxy, pass a proxy string formatted like so `"USER:PASS@SERVER:PORT"`.
 
 ```
-import selenium_scraper.proxy.config
+# from getting_started.py
 import selenium_scraper.scraper
-import selenium_scraper.user_agent
+import sbvirtualdisplay
+
+USE_VIRTUAL_DISPLAY = False
 
 if __name__ == "__main__":
+    if USE_VIRTUAL_DISPLAY:
+        # if you want to use a virtual display, configure it like so:
+        display = sbvirtualdisplay.Display(visible=True, size=(1440, 1880))
+    else:
+        display = None
+
+
     scraper = selenium_scraper.scraper.Scraper(
         name="test",
-        proxy=None, # proxy format "USER:PASS@SERVER:PORT"
-        headless=True,
-        undetected=False
+        proxy=None,  # "USER:PASS@SERVER:PORT"
+        undetected=False,
+        headless=False,
+        virtual_display=display,
         user_data_dir=None
     )
+    scraper.start(devtools=True)
     try:
-        scraper.start(devtools=True) # pass additional keyword arguments to the seleniumbase Driver constructor here
-        scraper.driver.get("https://google.com")
+        scraper.driver.get("https://ipinfo.io")
         scraper.driver.save_screenshot("getting_started_screenshot.png")
+        input("press any key to exit")
     finally:
         scraper.quit()
 ```

@@ -1,10 +1,15 @@
 import selenium_scraper.scraper
 import sbvirtualdisplay
 
+USE_VIRTUAL_DISPLAY = False
+
 if __name__ == "__main__":
-    display = None
-    # if you want to use a virtual display, configure it like so:
-    # display = sbvirtualdisplay.Display(visible=True, size=(1440, 1880))
+    if USE_VIRTUAL_DISPLAY:
+        # if you want to use a virtual display, configure it like so:
+        display = sbvirtualdisplay.Display(visible=True, size=(1440, 1880))
+    else:
+        display = None
+
 
     scraper = selenium_scraper.scraper.Scraper(
         name="test",
@@ -16,7 +21,7 @@ if __name__ == "__main__":
     )
     scraper.start(devtools=True)
     try:
-        scraper.driver.get("https://google.com")
+        scraper.driver.get("https://ipinfo.io")
         scraper.driver.save_screenshot("getting_started_screenshot.png")
         input("press any key to exit")
     finally:
