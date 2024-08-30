@@ -10,7 +10,6 @@ if __name__ == "__main__":
     else:
         display = None
 
-
     scraper = selenium_scraper.scraper.Scraper(
         name="test",
         proxy=None,  # "USER:PASS@SERVER:PORT"
@@ -21,7 +20,7 @@ if __name__ == "__main__":
     )
     scraper.start(devtools=True)
     try:
-        scraper.driver.get("https://ipinfo.io")
+        scraper.driver.get("https://www.primeopinion.com/en-gb")
         scraper.driver.save_screenshot("getting_started_screenshot.png")
         input("press any key to exit")
     finally:
