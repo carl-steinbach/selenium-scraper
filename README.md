@@ -52,12 +52,12 @@ if __name__ == "__main__":
         scraper.quit()
 ```
 
-
+Note: Seleniumbase should always be upgraded to the latest version to use all detection patches.
 
 ---
 
 Author:  Carl Steinbach
 
-Version: 1.7
+Version: 1.75
 
 ---
