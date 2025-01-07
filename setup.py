@@ -5,6 +5,6 @@ setup(
     version="1.7",
     packages=find_packages(),
     install_requires=[
-        "seleniumbase>=4.25.4"
+        "seleniumbase"
     ]
 )
